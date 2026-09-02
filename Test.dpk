@@ -34,6 +34,8 @@ requires
 
 contains
   TestDockForm in 'TestDockForm.pas',
-  TestRegister in 'TestRegister.pas';
+  TestRegister in 'TestRegister.pas',
+  uReadingState in 'uReadingState.pas',
+  uReaderWorker in 'uReaderWorker.pas';
 
 end.

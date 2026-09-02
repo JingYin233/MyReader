@@ -1,12 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899-12-30 00:00:00.000.249,=D:\Documents\Embarcadero\Studio\Projects\Test\TestRegister.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.999,D:\Documents\Embarcadero\Studio\Projects\Package1.dproj=D:\Documents\Embarcadero\Studio\Projects\Test.dproj</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.525,D:\Documents\Embarcadero\Studio\Projects\Test.dproj=D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.788,D:\Documents\Embarcadero\Studio\Projects\Test\Test1.dproj=D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj</Transaction>
     <Transaction>1899-12-30 00:00:00.000.042,=rtl.dcp</Transaction>
     <Transaction>1899-12-30 00:00:00.000.226,=D:\Documents\Embarcadero\Studio\Projects\Test\TestDockForm.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.261,D:\Documents\Embarcadero\Studio\Projects\Test\Test1.dproj=D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.249,=D:\Documents\Embarcadero\Studio\Projects\Test\TestRegister.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.999,D:\Documents\Embarcadero\Studio\Projects\Test.dproj=D:\Documents\Embarcadero\Studio\Projects\Package1.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.525,D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj=D:\Documents\Embarcadero\Studio\Projects\Test.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.261,D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj=D:\Documents\Embarcadero\Studio\Projects\Test\Test1.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.788,D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj=D:\Documents\Embarcadero\Studio\Projects\Test\Test1.dproj</Transaction>
+    <Transaction>2026-09-02 17:18:17.313,=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
+    <Transaction>2026-09-02 17:18:42.267,D:\Documents\Embarcadero\Studio\Projects\Test\uReadingState.pas=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
+    <Transaction>2026-09-02 17:28:14.669,=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
+    <Transaction>2026-09-02 17:28:51.536,D:\Documents\Embarcadero\Studio\Projects\Test\uReaderWorker.pas=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
   </Transactions>
 </BorlandProject>

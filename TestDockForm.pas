@@ -11,7 +11,8 @@ uses
   Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, System.ImageList, Vcl.ImgList,
   Vcl.CustomizeDlg, Vcl.ExtCtrls, Winapi.Windows,Vcl.Graphics,System.SysUtils,
   System.Generics.Collections,System.IOUtils,Vcl.Dialogs,System.Math, System.Zip,
-  System.RegularExpressions,Vcl.Themes,Xml.XMLDoc,Xml.XMLIntf,System.StrUtils;
+  System.RegularExpressions,Vcl.Themes,Xml.XMLDoc,Xml.XMLIntf,System.StrUtils,
+  uReadingState;
 
 type
   TBookChapter = record
@@ -57,6 +58,8 @@ type
   FPageWidth: Integer;
   FPageHeight: Integer;
 
+  FReadingState:TReadingState;
+
   procedure CalcCurrentPage;
 
   procedure JumpToChapter(Index: Integer);
@@ -82,7 +85,7 @@ implementation
 {$R *.dfm}
 
 const
-  PAGE_MARGIN = 10;
+  PAGE_MARGIN = 2;
   PAGE_FOOTER_HEIGHT = 40;
 
 procedure TTestDockForm.JumpToChapter(
@@ -794,6 +797,8 @@ begin
   FChapters := TList<TBookChapter>.Create;
   FPageStarts := TList<Integer>.Create;
 
+  FReadingState := TReadingState.Create;
+
   FPageWidth := ScrollBox1.ClientWidth;
   FPageHeight := ScrollBox1.ClientHeight;
 
@@ -971,6 +976,8 @@ end;
 
 destructor TTestDockForm.Destroy;
 begin
+  FReadingState.Free;
+
   FPageStarts.Free;
 
   FChapters.Free;
