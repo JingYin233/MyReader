@@ -376,10 +376,12 @@ object TestDockForm: TTestDockForm
     object ActionPrev: TAction
       Caption = 'ActionPrev'
       ImageIndex = 1
+      OnExecute = ActionPrevExecute
     end
     object ActionNext: TAction
       Caption = 'ActionNext'
       ImageIndex = 2
+      OnExecute = ActionNextExecute
     end
     object ActionPrevPage: TAction
       Caption = 'ActionPrevPage'

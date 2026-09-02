@@ -109,37 +109,21 @@ end;
 procedure TTestDockForm.Action2Execute(Sender: TObject);
 begin
 
-  if FCurrentPage + 1 < FPageStarts.Count then
+  if FCurrentPage+1 < FPageStarts.Count then
   begin
     Inc(FCurrentPage);
   end
-
   else
   begin
 
-    if FCurrentEnd < FChapters[FCurrentChapter].EndPos then
+    if FCurrentChapter < FChapters.Count-1 then
     begin
-
-      FPageStarts.Add(
-        FCurrentEnd + 1
+      BuildChapterPages(
+        FCurrentChapter+1
       );
-
-      Inc(FCurrentPage);
-
     end
-
     else
-    begin
-      if FCurrentChapter < FChapters.Count-1 then
-      begin
-        BuildChapterPages(
-          FCurrentChapter+1
-        );
-        Exit;
-      end
-      else
-        Exit;
-    end;
+      Exit;
 
   end;
 
@@ -149,6 +133,48 @@ begin
   PaintBox1.Invalidate;
 
 end;
+
+
+//procedure TTestDockForm.ActionOpenExecute(Sender: TObject);
+//var
+//  Dlg: TOpenDialog;
+//begin
+//  Dlg := TOpenDialog.Create(nil);
+//  try
+//    Dlg.Filter :=
+//      'Text Files (*.txt)|*.txt|' +
+//      'All Files (*.*)|*.*';
+//
+//    if Dlg.Execute then
+//    begin
+//      try
+//        FBookText := TFile.ReadAllText(
+//          Dlg.FileName,
+//          TEncoding.UTF8
+//        );
+//
+//        FPageStarts.Clear;
+//        FPageStarts.Add(1);
+//
+//        FCurrentPage := 0;
+//
+//        CalcCurrentPage;
+//
+//        PaintBox1.Invalidate;
+//      except
+//        on E: Exception do
+//        begin
+//          ShowMessage(
+//            '异常类型：' + E.ClassName + sLineBreak +
+//            '异常信息：' + E.Message
+//          );
+//        end;
+//      end;
+//    end;
+//  finally
+//    Dlg.Free;
+//  end;
+//end;
 
 // 下一章
 procedure TTestDockForm.ActionNextExecute(Sender: TObject);
@@ -180,8 +206,8 @@ begin
       try
         PaintBox1.Align := alNone;
 
-        FPageWidth := PaintBox1.Parent.ClientWidth;
-        FPageHeight := PaintBox1.Parent.ClientHeight;
+        FPageWidth := ScrollBox1.ClientWidth - GetSystemMetrics(SM_CXVSCROLL);
+       FPageHeight := ScrollBox1.ClientHeight - GetSystemMetrics(SM_CYHSCROLL);
 
         PaintBox1.Width := FPageWidth;
         PaintBox1.Height := FPageHeight;
@@ -714,10 +740,17 @@ end;
 procedure TTestDockForm.BuildChapterPages(
   Index: Integer
 );
+var
+  Pos: Integer;
+  EndPos: Integer;
 begin
+
+  FPageStarts.Clear;
+
 
   if Index < 0 then
     Exit;
+
 
   if Index >= FChapters.Count then
     Exit;
@@ -726,12 +759,28 @@ begin
   FCurrentChapter := Index;
 
 
-  FPageStarts.Clear;
+  Pos :=
+    FChapters[Index].StartPos;
 
 
-  FPageStarts.Add(
-    FChapters[Index].StartPos
-  );
+  EndPos :=
+    FChapters[Index].EndPos;
+
+
+  while Pos <= EndPos do
+  begin
+
+    FPageStarts.Add(Pos);
+
+
+    Pos :=
+      FitTextToPage(
+        FBookText,
+        Pos
+      )
+      + 1;
+
+  end;
 
 
   FCurrentPage := 0;
@@ -760,7 +809,6 @@ begin
   begin
     Dec(FCurrentPage);
   end
-
   else
   begin
 
@@ -768,11 +816,11 @@ begin
     begin
 
       BuildChapterPages(
-        FCurrentChapter - 1
+        FCurrentChapter-1
       );
 
-      // 不再跳最后一页
-      // 因为现在没有提前计算全部分页
+      FCurrentPage :=
+        FPageStarts.Count-1;
 
     end
     else
@@ -792,6 +840,8 @@ begin
   inherited Create(AOwner);
 
   FChapters := TList<TBookChapter>.Create;
+  FPageStarts := TList<Integer>.Create;
+
   FPageStarts := TList<Integer>.Create;
 
   FPageWidth := ScrollBox1.ClientWidth;

@@ -14,18 +14,6 @@ object TestDockForm: TTestDockForm
   Visible = True
   PixelsPerInch = 96
   TextHeight = 13
-  object PaintBox1: TPaintBox
-    Left = 0
-    Top = 26
-    Width = 300
-    Height = 174
-    Align = alClient
-    OnPaint = PaintBox1Paint
-    ExplicitLeft = 48
-    ExplicitTop = 112
-    ExplicitWidth = 105
-    ExplicitHeight = 105
-  end
   object ActionToolBar1: TActionToolBar
     Left = 0
     Top = 0
@@ -45,6 +33,25 @@ object TestDockForm: TTestDockForm
     Font.Style = []
     ParentFont = False
     Spacing = 0
+  end
+  object ScrollBox1: TScrollBox
+    Left = 0
+    Top = 26
+    Width = 300
+    Height = 174
+    Align = alClient
+    TabOrder = 1
+    object PaintBox1: TPaintBox
+      Left = 0
+      Top = 0
+      Width = 296
+      Height = 170
+      Align = alClient
+      OnPaint = PaintBox1Paint
+      ExplicitTop = 32
+      ExplicitWidth = 300
+      ExplicitHeight = 174
+    end
   end
   object ImageList1: TImageList
     Left = 240

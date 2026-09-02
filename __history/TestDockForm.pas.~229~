@@ -150,6 +150,48 @@ begin
 
 end;
 
+
+//procedure TTestDockForm.ActionOpenExecute(Sender: TObject);
+//var
+//  Dlg: TOpenDialog;
+//begin
+//  Dlg := TOpenDialog.Create(nil);
+//  try
+//    Dlg.Filter :=
+//      'Text Files (*.txt)|*.txt|' +
+//      'All Files (*.*)|*.*';
+//
+//    if Dlg.Execute then
+//    begin
+//      try
+//        FBookText := TFile.ReadAllText(
+//          Dlg.FileName,
+//          TEncoding.UTF8
+//        );
+//
+//        FPageStarts.Clear;
+//        FPageStarts.Add(1);
+//
+//        FCurrentPage := 0;
+//
+//        CalcCurrentPage;
+//
+//        PaintBox1.Invalidate;
+//      except
+//        on E: Exception do
+//        begin
+//          ShowMessage(
+//            '异常类型：' + E.ClassName + sLineBreak +
+//            '异常信息：' + E.Message
+//          );
+//        end;
+//      end;
+//    end;
+//  finally
+//    Dlg.Free;
+//  end;
+//end;
+
 // 下一章
 procedure TTestDockForm.ActionNextExecute(Sender: TObject);
 begin
@@ -180,8 +222,8 @@ begin
       try
         PaintBox1.Align := alNone;
 
-        FPageWidth := PaintBox1.Parent.ClientWidth;
-        FPageHeight := PaintBox1.Parent.ClientHeight;
+        FPageWidth := ScrollBox1.ClientWidth - GetSystemMetrics(SM_CXVSCROLL);
+        FPageHeight := ScrollBox1.ClientHeight - GetSystemMetrics(SM_CYHSCROLL);
 
         PaintBox1.Width := FPageWidth;
         PaintBox1.Height := FPageHeight;
