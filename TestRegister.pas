@@ -13,7 +13,8 @@ uses
   ToolsAPI,
   TestDockForm,
   DeskForm,
-  DeskUtil;
+  DeskUtil,
+  uReaderKeyboard;
 
 
 type
@@ -25,6 +26,7 @@ type
 
 var
   TestDockForm: TTestDockForm;
+  ReaderKeyboardBinding: TReaderKeyboardBinding;
 
 procedure CreateTestDockForm;
 begin
@@ -68,10 +70,31 @@ end;
 
 
 procedure Register;
+var
+  KS:IOTAKeyboardServices;
 begin
+
+  if Supports(
+      BorlandIDEServices,
+      IOTAKeyboardServices,
+      KS)
+  then
+  begin
+
+    ReaderKeyboardBinding :=
+      TReaderKeyboardBinding.Create;
+
+    KS.AddKeyboardBinding(
+      ReaderKeyboardBinding
+    );
+
+  end;
+
+
   CreateTestDockForm;
 
   AddTestMenu;
+
 end;
 
 

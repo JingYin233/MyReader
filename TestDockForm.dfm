@@ -343,24 +343,28 @@ object TestDockForm: TTestDockForm
             Caption = 'A&ctionPrev'
             ImageIndex = 1
             ShowCaption = False
+            ShortCut = 38
           end
           item
             Action = ActionNext
             Caption = 'Ac&tionNext'
             ImageIndex = 2
             ShowCaption = False
+            ShortCut = 40
           end
           item
             Action = ActionPrevPage
             Caption = 'Act&ionPrevPage'
             ImageIndex = 3
             ShowCaption = False
+            ShortCut = 37
           end
           item
-            Action = Action2
+            Action = ActionNextPage
             Caption = 'Acti&onNextPage'
             ImageIndex = 4
             ShowCaption = False
+            ShortCut = 39
           end>
         ActionBar = ActionToolBar1
       end>
@@ -388,10 +392,10 @@ object TestDockForm: TTestDockForm
       ImageIndex = 3
       OnExecute = ActionPrevPageExecute
     end
-    object Action2: TAction
+    object ActionNextPage: TAction
       Caption = 'ActionNextPage'
       ImageIndex = 4
-      OnExecute = Action2Execute
+      OnExecute = ActionNextPageExecute
     end
   end
 end

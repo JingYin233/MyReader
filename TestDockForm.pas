@@ -12,7 +12,7 @@ uses
   Vcl.CustomizeDlg, Vcl.ExtCtrls, Winapi.Windows,Vcl.Graphics,System.SysUtils,
   System.Generics.Collections,System.IOUtils,Vcl.Dialogs,System.Math, System.Zip,
   System.RegularExpressions,Vcl.Themes,Xml.XMLDoc,Xml.XMLIntf,System.StrUtils,
-  uReadingState;
+  uReadingState,ToolsAPI,Vcl.Menus;
 
 type
   TBookChapter = record
@@ -34,11 +34,11 @@ type
     ActionToolBar1: TActionToolBar;
     PaintBox1: TPaintBox;
     ActionPrevPage: TAction;
-    Action2: TAction;
+    ActionNextPage: TAction;
     ScrollBox1: TScrollBox;
     procedure PaintBox1Paint(Sender: TObject);
     procedure ActionPrevPageExecute(Sender: TObject);
-    procedure Action2Execute(Sender: TObject);
+    procedure ActionNextPageExecute(Sender: TObject);
     procedure ActionOpenExecute(Sender: TObject);
     procedure ActionPrevExecute(Sender: TObject);
     procedure ActionNextExecute(Sender: TObject);
@@ -77,16 +77,45 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+
+    procedure NextPage;
+    procedure PrevPage;
+    procedure NextChapter;
+    procedure PrevChapter;
   end;
 
+function GetTestDockForm:TTestDockForm;
 
 implementation
 
 {$R *.dfm}
 
+var
+  GTestDockForm:TTestDockForm;
+
 const
   PAGE_MARGIN = 2;
   PAGE_FOOTER_HEIGHT = 40;
+
+procedure TTestDockForm.NextPage;
+begin
+
+  ActionNextPageExecute(nil);
+
+end;
+
+procedure TTestDockForm.PrevPage;
+begin
+  ActionPrevPageExecute(nil);
+end;
+procedure TTestDockForm.NextChapter;
+begin
+  ActionNextExecute(nil);
+end;
+procedure TTestDockForm.PrevChapter;
+begin
+  ActionPrevExecute(nil);
+end;
 
 procedure TTestDockForm.JumpToChapter(
   Index: Integer
@@ -109,7 +138,7 @@ begin
 end;
 
 // 下一页
-procedure TTestDockForm.Action2Execute(Sender: TObject);
+procedure TTestDockForm.ActionNextPageExecute(Sender: TObject);
 begin
 
   if FCurrentPage + 1 < FPageStarts.Count then
@@ -794,6 +823,8 @@ constructor TTestDockForm.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
 
+  GTestDockForm := Self;
+
   FChapters := TList<TBookChapter>.Create;
   FPageStarts := TList<Integer>.Create;
 
@@ -908,6 +939,21 @@ begin
     StartPos + Best - 1;
 end;
 
+
+//{快捷键绑定}
+//procedure TTestDockForm.FormKeyDown(Sender: TObject; var Key: Word;
+//  Shift: TShiftState);
+//begin
+//  if Key = VK_LEFT then
+//    ActionPrevPage.Execute
+//  else if Key = VK_RIGHT then
+//    ActionNextPage.Execute
+//  else if Key = VK_UP then
+//    ActionPrev.Execute
+//  else if Key = VK_DOWN then
+//    ActionNext.Execute
+//end;
+
 //procedure TTestDockForm.FormResize(Sender: TObject);
 //begin
 //  if FPageStarts.Count = 0 then
@@ -923,7 +969,7 @@ function TTestDockForm.TextFitsPage(
   CharCount: Integer
 ): Boolean;
 const
-  PAGE_MARGIN = 10;
+  PAGE_MARGIN = 2;
   PAGE_FOOTER_HEIGHT = 40;
 var
   R: TRect;
@@ -976,14 +1022,22 @@ end;
 
 destructor TTestDockForm.Destroy;
 begin
+  if GTestDockForm = Self then
+    GTestDockForm := nil;
+
   FReadingState.Free;
 
   FPageStarts.Free;
 
   FChapters.Free;
-  FPageStarts.Free;
 
   inherited;
 end;
+
+function GetTestDockForm:TTestDockForm;
+begin
+  Result := GTestDockForm;
+end;
+
 
 end.
