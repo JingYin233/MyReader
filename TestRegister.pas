@@ -25,14 +25,19 @@ type
 
 
 var
-  TestDockForm: TTestDockForm;
-  ReaderKeyboardBinding: TReaderKeyboardBinding;
+  TestDockForm: TTestDockForm = nil;
+  ReaderKeyboardBinding: TReaderKeyboardBinding = nil;
+  TestMenuItem: TMenuItem = nil;
+
+
 
 procedure CreateTestDockForm;
 begin
   if not Assigned(TestDockForm) then
   begin
-    TestDockForm := TTestDockForm.Create(nil);
+    TestDockForm :=
+      TTestDockForm.Create(nil);
+
     RegisterFieldAddress(
       'TestDockForm',
       @TestDockForm
@@ -40,70 +45,151 @@ begin
   end;
 end;
 
+
+
 class procedure TTestMenu.OpenTestDock(Sender: TObject);
 begin
   CreateTestDockForm;
-  ShowDockableForm(TestDockForm);
+
+  ShowDockableForm(
+    TestDockForm
+  );
 end;
+
 
 
 procedure AddTestMenu;
 var
   Services: INTAServices;
   ViewMenu: TMenuItem;
-  Item: TMenuItem;
-begin
-  Services := BorlandIDEServices as INTAServices;
 
-  ViewMenu := Services.MainMenu.Items.Find('View');
+begin
+
+  Services :=
+    BorlandIDEServices as INTAServices;
+
+
+  ViewMenu :=
+    Services.MainMenu.Items.Find('View');
+
 
   if Assigned(ViewMenu) then
   begin
-    Item := TMenuItem.Create(ViewMenu);
 
-    Item.Caption := 'Test Dock';
-    Item.OnClick := TTestMenu.OpenTestDock;
-
-    ViewMenu.Add(Item);
-  end;
-end;
+    if Assigned(TestMenuItem) then
+      Exit;
 
 
-procedure Register;
-var
-  KS:IOTAKeyboardServices;
-begin
+    TestMenuItem :=
+      TMenuItem.Create(ViewMenu);
 
-  if Supports(
-      BorlandIDEServices,
-      IOTAKeyboardServices,
-      KS)
-  then
-  begin
 
-    ReaderKeyboardBinding :=
-      TReaderKeyboardBinding.Create;
+    TestMenuItem.Caption :=
+      'Test Dock';
 
-    KS.AddKeyboardBinding(
-      ReaderKeyboardBinding
+
+    TestMenuItem.OnClick :=
+      TTestMenu.OpenTestDock;
+
+
+    ViewMenu.Add(
+      TestMenuItem
     );
 
   end;
 
+end;
 
-  CreateTestDockForm;
+
+
+procedure RegisterReaderKeyboard;
+var
+  KS: IOTAKeyboardServices;
+
+begin
+
+  if Supports(
+       BorlandIDEServices,
+       IOTAKeyboardServices,
+       KS)
+  then
+  begin
+
+    if not Assigned(ReaderKeyboardBinding) then
+    begin
+
+      ReaderKeyboardBinding :=
+        TReaderKeyboardBinding.Create;
+
+
+      KS.AddKeyboardBinding(
+        ReaderKeyboardBinding
+      );
+
+    end;
+
+  end;
+
+end;
+
+
+
+procedure Register;
+
+begin
+
+  RegisterReaderKeyboard;
 
   AddTestMenu;
 
 end;
 
 
+
+procedure Cleanup;
+
+begin
+
+  //
+  // 菜单由插件创建，需要释放
+  //
+  if Assigned(TestMenuItem) then
+  begin
+
+    TestMenuItem.Free;
+
+    TestMenuItem := nil;
+
+  end;
+
+
+  //
+  // 以下两个对象不要 Free
+  //
+  // BDS OTA 管理它们生命周期
+  //
+  ReaderKeyboardBinding := nil;
+
+  TestDockForm := nil;
+
+end;
+
+
+
 initialization
 
   RegisterDesktopFormClass(
-  TTestDockForm,
-  'TestDockSection',
-  'TestDockForm'
-);
+    TTestDockForm,
+    'TestDockSection',
+    'TestDockForm'
+  );
+
+
+
+finalization
+
+  Cleanup;
+
+
 
 end.

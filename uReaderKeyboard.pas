@@ -39,12 +39,20 @@ type
       KeyCode: TShortcut;
       var BindingResult: TKeyBindingResult
     );
+
     procedure NextChapter(
       const Context: IOTAKeyContext;
       KeyCode: TShortcut;
       var BindingResult: TKeyBindingResult
     );
+
     procedure PrevChapter(
+      const Context: IOTAKeyContext;
+      KeyCode: TShortcut;
+      var BindingResult: TKeyBindingResult
+    );
+
+    procedure ToggleReadWindow(
       const Context: IOTAKeyContext;
       KeyCode: TShortcut;
       var BindingResult: TKeyBindingResult
@@ -89,9 +97,30 @@ begin
     nil
   );
 
+   BindingServices.AddKeyBinding(
+    [TextToShortCut('Ctrl+Shift+F12')],
+    ToggleReadWindow,
+    nil
+  );
+
 end;
 
+ procedure TReaderKeyboardBinding.ToggleReadWindow(
+  const Context: IOTAKeyContext;
+  KeyCode: TShortcut;
+  var BindingResult: TKeyBindingResult);
+var
+  Form: TTestDockForm;
+begin
 
+  Form := GetTestDockForm;
+
+  if Assigned(Form) then
+    Form.ToggleReadWindow;
+
+  BindingResult := krHandled;
+
+end;
 
 procedure TReaderKeyboardBinding.NextPage(
   const Context: IOTAKeyContext;

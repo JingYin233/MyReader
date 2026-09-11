@@ -114,6 +114,7 @@
                     <Source Name="MainSource">Test.dpk</Source>
                 </Source>
                 <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclDataSnapNativeServer270.bpl">Embarcadero DBExpress DataSnap Native Server Components</Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\21.0\Bpl\dclcxPivotGridOLAPRS27.bpl">ExpressPivotGrid OLAP by Developer Express Inc.</Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\21.0\Bpl\dcldxPSTeeChartRS27.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\21.0\Bpl\dcldxPSTeeChartRS27.bpl not found</Excluded_Packages>
                     <Excluded_Packages Name="C:\Users\Public\Documents\Embarcadero\Studio\21.0\Bpl\dcldxPSDBTeeChartRS27.bpl">File C:\Users\Public\Documents\Embarcadero\Studio\21.0\Bpl\dcldxPSDBTeeChartRS27.bpl not found</Excluded_Packages>

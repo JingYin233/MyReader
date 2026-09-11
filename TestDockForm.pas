@@ -3,16 +3,12 @@ unit TestDockForm;
 interface
 
 uses
-  System.Classes,
-  Vcl.Forms,
-  Vcl.Controls,
-  Vcl.StdCtrls,
-  DockForm, Vcl.ToolWin, Vcl.ActnMan, Vcl.ActnCtrls, System.Actions,
-  Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls, System.ImageList, Vcl.ImgList,
-  Vcl.CustomizeDlg, Vcl.ExtCtrls, Winapi.Windows,Vcl.Graphics,System.SysUtils,
-  System.Generics.Collections,System.IOUtils,Vcl.Dialogs,System.Math, System.Zip,
-  System.RegularExpressions,Vcl.Themes,Xml.XMLDoc,Xml.XMLIntf,System.StrUtils,
-  uReadingState,ToolsAPI,Vcl.Menus;
+  System.Classes,Vcl.Forms,Vcl.Controls,Vcl.StdCtrls,DockForm, Vcl.ToolWin,
+  Vcl.ActnMan, Vcl.ActnCtrls, System.Actions,Vcl.ActnList, Vcl.PlatformDefaultStyleActnCtrls,
+  System.ImageList, Vcl.ImgList,Vcl.CustomizeDlg, Vcl.ExtCtrls, Winapi.Windows,
+  Vcl.Graphics,System.SysUtils,System.Generics.Collections,System.IOUtils,
+  Vcl.Dialogs,System.Math, System.Zip,System.RegularExpressions,Vcl.Themes,
+  Xml.XMLDoc,Xml.XMLIntf,System.StrUtils,uReadingState,ToolsAPI,Vcl.Menus;
 
 type
   TBookChapter = record
@@ -36,44 +32,55 @@ type
     ActionPrevPage: TAction;
     ActionNextPage: TAction;
     ScrollBox1: TScrollBox;
+    ActionSC: TAction;
+    ChapterPanel: TPanel;
+    ChapterList: TListBox;
     procedure PaintBox1Paint(Sender: TObject);
     procedure ActionPrevPageExecute(Sender: TObject);
     procedure ActionNextPageExecute(Sender: TObject);
     procedure ActionOpenExecute(Sender: TObject);
     procedure ActionPrevExecute(Sender: TObject);
     procedure ActionNextExecute(Sender: TObject);
+    procedure ActionSCExecute(Sender: TObject);
+    procedure ChapterListClick(Sender: TObject);
   private
-  FBookText: string;
+    FBookText: string;
+    FChapterVisible:Boolean;
+    FChapters: TList<TBookChapter>;
 
-  FChapters: TList<TBookChapter>;
+    FCurrentStart: Integer;
+    FCurrentEnd: Integer;
+    FCurrentChapter: Integer;
 
-  FCurrentStart: Integer;
-  FCurrentEnd: Integer;
-  FCurrentChapter: Integer;
+    FCurrentPage: Integer;
 
-  FCurrentPage: Integer;
+    FPageStarts: TList<Integer>;
 
-  FPageStarts: TList<Integer>;
+    FPageWidth: Integer;
+    FPageHeight: Integer;
 
-  FPageWidth: Integer;
-  FPageHeight: Integer;
+    FReadingState:TReadingState;
 
-  FReadingState:TReadingState;
+    procedure ToggleWindow;
 
-  procedure CalcCurrentPage;
+    procedure CalcCurrentPage;
 
-  procedure JumpToChapter(Index: Integer);
+    procedure JumpToChapter(Index: Integer);
 
-  procedure BuildChapterPages(Index: Integer);
+    procedure BuildChapterPages(Index: Integer);
 
-  function LoadEpubText(const FileName: string): string;
-  function FindOpfPath(Zip: TZipFile): string;
+    procedure SplitChapters(const Text: string;const Href: string;var BookText: string);
 
-  function FitTextToPage(const AText: string;StartPos: Integer): Integer;
+    function LoadEpubText(const FileName: string): string;
+    function FindOpfPath(Zip: TZipFile): string;
 
-  function TextFitsPage(const AText: string;StartPos: Integer;CharCount: Integer): Boolean;
+    function FitTextToPage(const AText: string;StartPos: Integer): Integer;
 
-  function ParseOpfAndLoadText(Zip: TZipFile;const OpfPath: string): string;
+    function TextFitsPage(const AText: string;StartPos: Integer;CharCount: Integer): Boolean;
+
+    function ParseOpfAndLoadText(Zip: TZipFile;const OpfPath: string): string;
+
+    function FindChapterTitle(const Text: string;out Title: string): Boolean;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -82,6 +89,7 @@ type
     procedure PrevPage;
     procedure NextChapter;
     procedure PrevChapter;
+    procedure ToggleReadWindow;
   end;
 
 function GetTestDockForm:TTestDockForm;
@@ -96,6 +104,298 @@ var
 const
   PAGE_MARGIN = 2;
   PAGE_FOOTER_HEIGHT = 40;
+
+procedure TTestDockForm.SplitChapters(
+  const Text: string;
+  const Href: string;
+  var BookText: string
+);
+var
+  Reg: TRegEx;
+
+  Matches: TMatchCollection;
+
+  M: TMatch;
+
+  LastPos: Integer;
+
+  Chapter: TBookChapter;
+
+  Title: string;
+
+  Content: string;
+
+  LastChapter: TBookChapter;
+
+begin
+
+  Reg :=
+    TRegEx.Create(
+      '第\s*[0-9零一二三四五六七八九十百千万]+\s*章(\s+|$)[^\r\n]*',
+      [
+        roIgnoreCase
+      ]
+    );
+
+
+  Matches :=
+    Reg.Matches(Text);
+
+
+
+  //=================================
+  // 当前文件没有章节标题
+  // 说明是上一章节的延续
+  //=================================
+
+  if Matches.Count = 0 then
+  begin
+
+    if FChapters.Count > 0 then
+    begin
+
+      BookText :=
+        BookText +
+        Text +
+        sLineBreak +
+        sLineBreak;
+
+
+      LastChapter :=
+        FChapters[
+          FChapters.Count - 1
+        ];
+
+
+      LastChapter.EndPos :=
+        Length(BookText);
+
+
+      FChapters[
+        FChapters.Count - 1
+      ] :=
+        LastChapter;
+
+    end;
+
+
+    Exit;
+
+  end;
+
+
+
+  LastPos := 1;
+
+
+
+  // 当前文件包含章节标题
+
+  for M in Matches do
+  begin
+
+
+    //==============================
+    // 当前标题之前的内容
+    // 属于上一章节
+    //==============================
+
+    if M.Index > LastPos then
+    begin
+
+      Content :=
+        Copy(
+          Text,
+          LastPos,
+          M.Index - LastPos
+        );
+
+
+      if Trim(Content) <> '' then
+      begin
+
+
+        // 已经存在章节标题
+        if Title <> '' then
+        begin
+
+          Chapter.Title :=
+            Title;
+
+
+          Chapter.Href :=
+            Href;
+
+
+          Chapter.StartPos :=
+            Length(BookText)+1;
+
+
+          BookText :=
+            BookText +
+            Content +
+            sLineBreak +
+            sLineBreak;
+
+
+          Chapter.EndPos :=
+            Length(BookText);
+
+
+          FChapters.Add(
+            Chapter
+          );
+
+        end;
+
+
+      end;
+
+
+    end;
+
+
+
+    // 保存当前章节标题
+
+    Title :=
+      Trim(
+        M.Value
+      );
+
+
+    LastPos :=
+      M.Index +
+      M.Length;
+
+
+  end;
+
+
+
+  //=================================
+  // 最后一个章节正文
+  //=================================
+
+  if LastPos <= Length(Text) then
+  begin
+
+    Content :=
+      Copy(
+        Text,
+        LastPos,
+        Length(Text)-LastPos+1
+      );
+
+
+    if Title <> '' then
+    begin
+
+      Chapter.Title :=
+        Title;
+
+
+      Chapter.Href :=
+        Href;
+
+
+      Chapter.StartPos :=
+        Length(BookText)+1;
+
+
+      BookText :=
+        BookText +
+        Content +
+        sLineBreak +
+        sLineBreak;
+
+
+      Chapter.EndPos :=
+        Length(BookText);
+
+
+      FChapters.Add(
+        Chapter
+      );
+
+    end
+    else
+    begin
+
+      // 理论上不会进入这里
+      // 防止异常文本丢失
+
+      BookText :=
+        BookText +
+        Content +
+        sLineBreak +
+        sLineBreak;
+
+    end;
+
+
+  end;
+
+
+end;
+
+function TTestDockForm.FindChapterTitle(const Text: string;out Title: string): Boolean;
+var
+  Reg: TRegEx;
+  M: TMatch;
+
+begin
+
+  Result := False;
+
+  Title := '';
+
+
+  Reg :=
+    TRegEx.Create(
+      '第\s*[0-9零一二三四五六七八九十百千万]+\s*章[^\r\n]*',
+      [
+        roIgnoreCase
+      ]
+    );
+
+
+  M :=
+    Reg.Match(Text);
+
+
+  if M.Success then
+  begin
+
+    Title :=
+      Trim(
+        M.Value
+      );
+
+
+    Result :=
+      True;
+
+  end;
+
+
+end;
+
+procedure TTestDockForm.ToggleWindow;
+begin
+
+  if Visible then
+    Hide
+  else
+    Show;
+end;
+
+procedure TTestDockForm.ToggleReadWindow;
+begin
+
+  ToggleWindow;
+
+end;
 
 procedure TTestDockForm.NextPage;
 begin
@@ -242,8 +542,21 @@ begin
             '不支持的文件格式'
           );
 
-        FCurrentChapter:=0;
+        // 加载章节列表
+        ChapterList.Items.BeginUpdate;
+        try
+          ChapterList.Items.Clear;
+          for var I := 0 to FChapters.Count - 1 do
+          begin
+            ChapterList.Items.Add(
+              FChapters[I].Title
+            );
+          end;
+        finally
+          ChapterList.Items.EndUpdate;
+        end;
 
+        FCurrentChapter:=0;
         BuildChapterPages(0);
 
         ScrollBox1.VertScrollBar.Position := 0;
@@ -695,33 +1008,13 @@ begin
 
 
       Chapter.Title :=
-        ChangeFileExt(
-          ExtractFileName(Href),
-          ''
-        );
+        '';
 
 
-      Chapter.Href :=
-        Href;
-
-
-      Chapter.StartPos :=
-        Length(Result)+1;
-
-
-      Result :=
-        Result +
-        Html +
-        sLineBreak +
-        sLineBreak;
-
-
-      Chapter.EndPos :=
-        Length(Result);
-
-
-      FChapters.Add(
-        Chapter
+      SplitChapters(
+        Html,
+        Href,
+        Result
       );
 
 
@@ -817,6 +1110,14 @@ begin
 
   PaintBox1.Invalidate;
 
+end;
+
+procedure TTestDockForm.ActionSCExecute(Sender: TObject);
+begin
+  FChapterVisible :=
+    not FChapterVisible;
+  ChapterPanel.Visible :=
+    FChapterVisible;
 end;
 
 constructor TTestDockForm.Create(AOwner: TComponent);
@@ -1018,6 +1319,18 @@ begin
       FBookText,
       FCurrentStart
     );
+end;
+
+procedure TTestDockForm.ChapterListClick(Sender: TObject);
+begin
+  if ChapterList.ItemIndex>=0 then
+  begin
+    JumpToChapter(
+      ChapterList.ItemIndex
+    );
+    ChapterPanel.Visible:=False;
+    FChapterVisible:=False;
+  end;
 end;
 
 destructor TTestDockForm.Destroy;
