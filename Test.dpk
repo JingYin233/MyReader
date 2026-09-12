@@ -37,6 +37,7 @@ contains
   TestRegister in 'TestRegister.pas',
   uReadingState in 'uReadingState.pas',
   uReaderWorker in 'uReaderWorker.pas',
-  uReaderKeyboard in 'uReaderKeyboard.pas';
+  uReaderKeyboard in 'uReaderKeyboard.pas',
+  uReaderColor in 'uReaderColor.pas';
 
 end.

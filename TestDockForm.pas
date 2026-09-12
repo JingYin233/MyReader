@@ -8,7 +8,7 @@ uses
   System.ImageList, Vcl.ImgList,Vcl.CustomizeDlg, Vcl.ExtCtrls, Winapi.Windows,
   Vcl.Graphics,System.SysUtils,System.Generics.Collections,System.IOUtils,
   Vcl.Dialogs,System.Math, System.Zip,System.RegularExpressions,Vcl.Themes,
-  Xml.XMLDoc,Xml.XMLIntf,System.StrUtils,uReadingState,ToolsAPI,Vcl.Menus;
+  Xml.XMLDoc,Xml.XMLIntf,System.StrUtils,uReadingState,ToolsAPI,Vcl.Menus,uReaderColor;
 
 type
   TBookChapter = record
@@ -35,6 +35,7 @@ type
     ActionSC: TAction;
     ChapterPanel: TPanel;
     ChapterList: TListBox;
+    ActionChagColor: TAction;
     procedure PaintBox1Paint(Sender: TObject);
     procedure ActionPrevPageExecute(Sender: TObject);
     procedure ActionNextPageExecute(Sender: TObject);
@@ -43,6 +44,7 @@ type
     procedure ActionNextExecute(Sender: TObject);
     procedure ActionSCExecute(Sender: TObject);
     procedure ChapterListClick(Sender: TObject);
+    procedure ActionChagColorExecute(Sender: TObject);
   private
     FBookText: string;
     FChapterVisible:Boolean;
@@ -60,6 +62,8 @@ type
     FPageHeight: Integer;
 
     FReadingState:TReadingState;
+
+    FReaderColor:TReaderColor;
 
     procedure ToggleWindow;
 
@@ -482,7 +486,15 @@ begin
 
 end;
 
-// 下一章
+{切换字体颜色}
+procedure TTestDockForm.ActionChagColorExecute(Sender: TObject);
+begin
+  FReaderColor.SelectFontColor;
+
+  PaintBox1.Invalidate;
+end;
+
+{下一章}
 procedure TTestDockForm.ActionNextExecute(Sender: TObject);
 begin
   if FCurrentChapter >= FChapters.Count-1 then
@@ -1131,6 +1143,8 @@ begin
 
   FReadingState := TReadingState.Create;
 
+  FReaderColor := TReaderColor.Create;
+
   FPageWidth := ScrollBox1.ClientWidth;
   FPageHeight := ScrollBox1.ClientHeight;
 
@@ -1153,11 +1167,10 @@ var
   R: TRect;
   S: string;
 begin
-  PaintBox1.Color :=
-  StyleServices.GetSystemColor(clWindow);
+  PaintBox1.Color := StyleServices.GetSystemColor(clWindow);
 
-  PaintBox1.Canvas.Font.Color :=
-  StyleServices.GetSystemColor(clWindowText);
+  PaintBox1.Canvas.Font.Color := FReaderColor.FontColor;
+
   if FBookText = '' then
     Exit;
   PaintBox1.Canvas.Brush.Style := bsClear;
@@ -1339,6 +1352,8 @@ begin
     GTestDockForm := nil;
 
   FReadingState.Free;
+
+  FReaderColor.Free;
 
   FPageStarts.Free;
 
