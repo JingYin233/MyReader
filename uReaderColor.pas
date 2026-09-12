@@ -3,86 +3,57 @@ unit uReaderColor;
 interface
 
 uses
-  System.Classes,
-  Vcl.Graphics,
-  Vcl.Dialogs;
-
+  System.Classes, Vcl.Graphics, Vcl.Dialogs;
 
 type
-
   TReaderColor = class
   private
-
-    FFontColor:TColor;
-
+    FFontColor: TColor;
 
   public
-
     constructor Create;
 
-
-    procedure SetFontColor(
-      const AColor:TColor
-    );
-
+    procedure SetFontColor(const AColor: TColor);
 
     procedure SelectFontColor;
 
-
-    property FontColor:TColor
-      read FFontColor;
+    property FontColor: TColor read FFontColor;
 
   end;
 
-
 implementation
-
 
 constructor TReaderColor.Create;
 begin
 
-  FFontColor :=
-    clWindowText;
+  FFontColor := clWindowText;
 
 end;
 
-
-
-procedure TReaderColor.SetFontColor(
-  const AColor:TColor
-);
+procedure TReaderColor.SetFontColor(const AColor: TColor);
 begin
 
-  FFontColor :=
-    AColor;
+  FFontColor := AColor;
 
 end;
-
-
 
 procedure TReaderColor.SelectFontColor;
 var
-  Dlg:TColorDialog;
-
+  Dlg: TColorDialog;
 begin
 
-  Dlg :=
-    TColorDialog.Create(nil);
+  Dlg := TColorDialog.Create(nil);
 
   try
 
-    Dlg.Color :=
-      FFontColor;
-
+    Dlg.Color := FFontColor;
 
     if Dlg.Execute then
     begin
 
-      FFontColor :=
-        Dlg.Color;
+      FFontColor := Dlg.Color;
 
     end;
-
 
   finally
 
@@ -92,5 +63,5 @@ begin
 
 end;
 
-
 end.
+

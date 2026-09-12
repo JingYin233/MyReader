@@ -3,24 +3,12 @@ unit uReaderKeyboard;
 interface
 
 uses
-  ToolsAPI,
-  Vcl.Menus,
-  System.Classes,
-  Winapi.Windows,
-  Vcl.Dialogs,
-  TestDockForm;
+  ToolsAPI, Vcl.Menus, System.Classes, Winapi.Windows, Vcl.Dialogs, TestDockForm;
 
 type
-
-  TReaderKeyboardBinding = class(
-    TNotifierObject,
-    IOTAKeyboardBinding
-  )
+  TReaderKeyboardBinding = class(TNotifierObject, IOTAKeyboardBinding)
   public
-
-    procedure BindKeyboard(
-      const BindingServices: IOTAKeyBindingServices
-    );
+    procedure BindKeyboard(const BindingServices: IOTAKeyBindingServices);
 
     function GetBindingType: TBindingType;
 
@@ -28,87 +16,38 @@ type
 
     function GetName: string;
 
-    procedure NextPage(
-      const Context: IOTAKeyContext;
-      KeyCode: TShortcut;
-      var BindingResult: TKeyBindingResult
-    );
+    procedure NextPage(const Context: IOTAKeyContext; KeyCode: TShortcut; var BindingResult: TKeyBindingResult);
 
-    procedure PrevPage(
-      const Context: IOTAKeyContext;
-      KeyCode: TShortcut;
-      var BindingResult: TKeyBindingResult
-    );
+    procedure PrevPage(const Context: IOTAKeyContext; KeyCode: TShortcut; var BindingResult: TKeyBindingResult);
 
-    procedure NextChapter(
-      const Context: IOTAKeyContext;
-      KeyCode: TShortcut;
-      var BindingResult: TKeyBindingResult
-    );
+    procedure NextChapter(const Context: IOTAKeyContext; KeyCode: TShortcut; var BindingResult: TKeyBindingResult);
 
-    procedure PrevChapter(
-      const Context: IOTAKeyContext;
-      KeyCode: TShortcut;
-      var BindingResult: TKeyBindingResult
-    );
+    procedure PrevChapter(const Context: IOTAKeyContext; KeyCode: TShortcut; var BindingResult: TKeyBindingResult);
 
-    procedure ToggleReadWindow(
-      const Context: IOTAKeyContext;
-      KeyCode: TShortcut;
-      var BindingResult: TKeyBindingResult
-    );
+    procedure ToggleReadWindow(const Context: IOTAKeyContext; KeyCode: TShortcut; var BindingResult: TKeyBindingResult);
 
   end;
 
-
 implementation
 
-
-procedure TReaderKeyboardBinding.BindKeyboard(
-  const BindingServices: IOTAKeyBindingServices);
+procedure TReaderKeyboardBinding.BindKeyboard(const BindingServices: IOTAKeyBindingServices);
 begin
 
-  OutputDebugString(
-    'BindKeyboard'
-  );
+  OutputDebugString('BindKeyboard');
 
+  BindingServices.AddKeyBinding([TextToShortCut('Ctrl+Right')], NextPage, nil);
 
-  BindingServices.AddKeyBinding(
-    [TextToShortCut('Ctrl+Right')],
-    NextPage,
-    nil
-  );
+  BindingServices.AddKeyBinding([TextToShortCut('Ctrl+Left')], PrevPage, nil);
 
-  BindingServices.AddKeyBinding(
-    [TextToShortCut('Ctrl+Left')],
-    PrevPage,
-    nil
-  );
+  BindingServices.AddKeyBinding([TextToShortCut('Ctrl+Up')], PrevChapter, nil);
 
-  BindingServices.AddKeyBinding(
-    [TextToShortCut('Ctrl+Up')],
-    PrevChapter,
-    nil
-  );
+  BindingServices.AddKeyBinding([TextToShortCut('Ctrl+Down')], NextChapter, nil);
 
-  BindingServices.AddKeyBinding(
-    [TextToShortCut('Ctrl+Down')],
-    NextChapter,
-    nil
-  );
-
-   BindingServices.AddKeyBinding(
-    [TextToShortCut('Ctrl+Shift+F12')],
-    ToggleReadWindow,
-    nil
-  );
+  BindingServices.AddKeyBinding([TextToShortCut('Ctrl+Shift+F12')], ToggleReadWindow, nil);
 
 end;
 
- procedure TReaderKeyboardBinding.ToggleReadWindow(
-  const Context: IOTAKeyContext;
-  KeyCode: TShortcut;
-  var BindingResult: TKeyBindingResult);
+procedure TReaderKeyboardBinding.ToggleReadWindow(const Context: IOTAKeyContext; KeyCode: TShortcut; var BindingResult: TKeyBindingResult);
 var
   Form: TTestDockForm;
 begin
@@ -122,10 +61,7 @@ begin
 
 end;
 
-procedure TReaderKeyboardBinding.NextPage(
-  const Context: IOTAKeyContext;
-  KeyCode: TShortcut;
-  var BindingResult: TKeyBindingResult);
+procedure TReaderKeyboardBinding.NextPage(const Context: IOTAKeyContext; KeyCode: TShortcut; var BindingResult: TKeyBindingResult);
 var
   Form: TTestDockForm;
 begin
@@ -139,11 +75,7 @@ begin
 
 end;
 
-
-procedure TReaderKeyboardBinding.PrevPage(
-  const Context: IOTAKeyContext;
-  KeyCode: TShortcut;
-  var BindingResult: TKeyBindingResult);
+procedure TReaderKeyboardBinding.PrevPage(const Context: IOTAKeyContext; KeyCode: TShortcut; var BindingResult: TKeyBindingResult);
 var
   Form: TTestDockForm;
 begin
@@ -153,11 +85,7 @@ begin
   BindingResult := krHandled;
 end;
 
-
-procedure TReaderKeyboardBinding.NextChapter(
-  const Context: IOTAKeyContext;
-  KeyCode: TShortcut;
-  var BindingResult: TKeyBindingResult);
+procedure TReaderKeyboardBinding.NextChapter(const Context: IOTAKeyContext; KeyCode: TShortcut; var BindingResult: TKeyBindingResult);
 var
   Form: TTestDockForm;
 begin
@@ -169,11 +97,7 @@ begin
   BindingResult := krHandled;
 end;
 
-
-procedure TReaderKeyboardBinding.PrevChapter(
-  const Context: IOTAKeyContext;
-  KeyCode: TShortcut;
-  var BindingResult: TKeyBindingResult);
+procedure TReaderKeyboardBinding.PrevChapter(const Context: IOTAKeyContext; KeyCode: TShortcut; var BindingResult: TKeyBindingResult);
 var
   Form: TTestDockForm;
 begin
@@ -185,29 +109,20 @@ begin
   BindingResult := krHandled;
 end;
 
-
-function TReaderKeyboardBinding.GetBindingType:
-TBindingType;
+function TReaderKeyboardBinding.GetBindingType: TBindingType;
 begin
-  Result :=
-    btPartial;
+  Result := btPartial;
 end;
 
-
-function TReaderKeyboardBinding.GetDisplayName:
-string;
+function TReaderKeyboardBinding.GetDisplayName: string;
 begin
-  Result :=
-    'Reader Keyboard';
+  Result := 'Reader Keyboard';
 end;
 
-
-function TReaderKeyboardBinding.GetName:
-string;
+function TReaderKeyboardBinding.GetName: string;
 begin
-  Result :=
-    'ReaderKeyboardBinding';
+  Result := 'ReaderKeyboardBinding';
 end;
-
 
 end.
+

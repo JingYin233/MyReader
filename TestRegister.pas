@@ -7,15 +7,8 @@ procedure Register;
 implementation
 
 uses
-  System.Classes,
-  System.SysUtils,
-  Vcl.Menus,
-  ToolsAPI,
-  TestDockForm,
-  DeskForm,
-  DeskUtil,
-  uReaderKeyboard;
-
+  System.Classes, System.SysUtils, Vcl.Menus, ToolsAPI, TestDockForm, DeskForm,
+  DeskUtil, uReaderKeyboard;
 
 type
   TTestMenu = class
@@ -23,55 +16,37 @@ type
     class procedure OpenTestDock(Sender: TObject);
   end;
 
-
 var
   TestDockForm: TTestDockForm = nil;
   ReaderKeyboardBinding: TReaderKeyboardBinding = nil;
   TestMenuItem: TMenuItem = nil;
 
-
-
 procedure CreateTestDockForm;
 begin
   if not Assigned(TestDockForm) then
   begin
-    TestDockForm :=
-      TTestDockForm.Create(nil);
+    TestDockForm := TTestDockForm.Create(nil);
 
-    RegisterFieldAddress(
-      'TestDockForm',
-      @TestDockForm
-    );
+    RegisterFieldAddress('TestDockForm', @TestDockForm);
   end;
 end;
-
-
 
 class procedure TTestMenu.OpenTestDock(Sender: TObject);
 begin
   CreateTestDockForm;
 
-  ShowDockableForm(
-    TestDockForm
-  );
+  ShowDockableForm(TestDockForm);
 end;
-
-
 
 procedure AddTestMenu;
 var
   Services: INTAServices;
   ViewMenu: TMenuItem;
-
 begin
 
-  Services :=
-    BorlandIDEServices as INTAServices;
+  Services := BorlandIDEServices as INTAServices;
 
-
-  ViewMenu :=
-    Services.MainMenu.Items.Find('View');
-
+  ViewMenu := Services.MainMenu.Items.Find('View');
 
   if Assigned(ViewMenu) then
   begin
@@ -79,52 +54,32 @@ begin
     if Assigned(TestMenuItem) then
       Exit;
 
+    TestMenuItem := TMenuItem.Create(ViewMenu);
 
-    TestMenuItem :=
-      TMenuItem.Create(ViewMenu);
+    TestMenuItem.Caption := 'Test Dock';
 
+    TestMenuItem.OnClick := TTestMenu.OpenTestDock;
 
-    TestMenuItem.Caption :=
-      'Test Dock';
-
-
-    TestMenuItem.OnClick :=
-      TTestMenu.OpenTestDock;
-
-
-    ViewMenu.Add(
-      TestMenuItem
-    );
+    ViewMenu.Add(TestMenuItem);
 
   end;
 
 end;
 
-
-
 procedure RegisterReaderKeyboard;
 var
   KS: IOTAKeyboardServices;
-
 begin
 
-  if Supports(
-       BorlandIDEServices,
-       IOTAKeyboardServices,
-       KS)
-  then
+  if Supports(BorlandIDEServices, IOTAKeyboardServices, KS) then
   begin
 
     if not Assigned(ReaderKeyboardBinding) then
     begin
 
-      ReaderKeyboardBinding :=
-        TReaderKeyboardBinding.Create;
+      ReaderKeyboardBinding := TReaderKeyboardBinding.Create;
 
-
-      KS.AddKeyboardBinding(
-        ReaderKeyboardBinding
-      );
+      KS.AddKeyboardBinding(ReaderKeyboardBinding);
 
     end;
 
@@ -132,10 +87,7 @@ begin
 
 end;
 
-
-
 procedure Register;
-
 begin
 
   RegisterReaderKeyboard;
@@ -144,10 +96,7 @@ begin
 
 end;
 
-
-
 procedure Cleanup;
-
 begin
 
   //
@@ -174,22 +123,12 @@ begin
 
 end;
 
-
-
 initialization
-
-  RegisterDesktopFormClass(
-    TTestDockForm,
-    'TestDockSection',
-    'TestDockForm'
-  );
-
+  RegisterDesktopFormClass(TTestDockForm, 'TestDockSection', 'TestDockForm');
 
 
 finalization
-
   Cleanup;
 
-
-
 end.
+

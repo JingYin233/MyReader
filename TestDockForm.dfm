@@ -18,7 +18,7 @@ object TestDockForm: TTestDockForm
     Left = 0
     Top = 0
     Width = 300
-    Height = 54
+    Height = 26
     ActionManager = ActionManager1
     Caption = 'ActionToolBar1'
     Color = clMenuBar
@@ -33,27 +33,23 @@ object TestDockForm: TTestDockForm
     Font.Style = []
     ParentFont = False
     Spacing = 0
-    ExplicitHeight = 26
   end
   object ScrollBox1: TScrollBox
     Left = 0
-    Top = 54
+    Top = 26
     Width = 300
-    Height = 146
+    Height = 174
     Align = alClient
     TabOrder = 1
-    ExplicitTop = 26
-    ExplicitHeight = 174
     object PaintBox1: TPaintBox
       Left = 0
       Top = 0
       Width = 296
-      Height = 142
+      Height = 170
       Align = alClient
       OnPaint = PaintBox1Paint
       ExplicitLeft = -1
       ExplicitTop = -3
-      ExplicitHeight = 170
     end
     object ChapterPanel: TPanel
       Left = 152

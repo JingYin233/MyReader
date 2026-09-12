@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899-12-30 00:00:00.000.125,D:\Documents\Embarcadero\Studio\Projects\Test\uReaderColor.pas=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.226,=D:\Documents\Embarcadero\Studio\Projects\Test\TestDockForm.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.267,D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas=D:\Documents\Embarcadero\Studio\Projects\Test\uReadingState.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.536,D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas=D:\Documents\Embarcadero\Studio\Projects\Test\uReaderWorker.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.525,D:\Documents\Embarcadero\Studio\Projects\Test.dproj=D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.999,D:\Documents\Embarcadero\Studio\Projects\Package1.dproj=D:\Documents\Embarcadero\Studio\Projects\Test.dproj</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.515,D:\Documents\Embarcadero\Studio\Projects\Test\uReaderKeyboard.pas=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.249,=D:\Documents\Embarcadero\Studio\Projects\Test\TestRegister.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.669,=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.042,=rtl.dcp</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.127,D:\Documents\Embarcadero\Studio\Projects\Test\uReaderTypes.pas=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.788,D:\Documents\Embarcadero\Studio\Projects\Test\Test1.dproj=D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.261,D:\Documents\Embarcadero\Studio\Projects\Test\Test1.dproj=D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj</Transaction>
     <Transaction>1899-12-30 00:00:00.000.085,=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.236,=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.313,=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
     <Transaction>1899-12-30 00:00:00.000.548,=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.127,D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas=D:\Documents\Embarcadero\Studio\Projects\Test\uReaderTypes.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.313,=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.999,D:\Documents\Embarcadero\Studio\Projects\Test.dproj=D:\Documents\Embarcadero\Studio\Projects\Package1.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.267,D:\Documents\Embarcadero\Studio\Projects\Test\uReadingState.pas=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.249,=D:\Documents\Embarcadero\Studio\Projects\Test\TestRegister.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.236,=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.125,D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas=D:\Documents\Embarcadero\Studio\Projects\Test\uReaderColor.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.261,D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj=D:\Documents\Embarcadero\Studio\Projects\Test\Test1.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.788,D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj=D:\Documents\Embarcadero\Studio\Projects\Test\Test1.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.525,D:\Documents\Embarcadero\Studio\Projects\Test\Test.dproj=D:\Documents\Embarcadero\Studio\Projects\Test.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.536,D:\Documents\Embarcadero\Studio\Projects\Test\uReaderWorker.pas=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.515,D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas=D:\Documents\Embarcadero\Studio\Projects\Test\uReaderKeyboard.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.669,=D:\Documents\Embarcadero\Studio\Projects\Test\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.226,=D:\Documents\Embarcadero\Studio\Projects\Test\TestDockForm.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.042,=rtl.dcp</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <File Path="TestDockForm.pas"/>
@@ -26,8 +26,8 @@
     <File Path="uReaderKeyboard.pas"/>
     <File Path="uReaderWorker.pas"/>
     <File Path="uReadingState.pas"/>
+    <File Path="designide.dcp"/>
     <File Path="rtl.dcp"/>
     <File Path="vcl.dcp"/>
-    <File Path="designide.dcp"/>
   </ProjectSortOrder>
 </BorlandProject>
